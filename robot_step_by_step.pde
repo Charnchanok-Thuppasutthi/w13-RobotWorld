@@ -13,29 +13,37 @@ void draw() {
 
 
 class World {
-  Robot robot ;
+  Robot[] robot ;
   Target target ;
   Wall[] walls ;
   int block_size;
   InputProcessor input;
 
   World(int block_size ) {
-    this.robot = new Robot(5, 5, this);
+    //this.robot = new Robot(5, 5, this);
+    this.robot = new Robot[4];
     this.block_size = block_size;
     this.target = new Target(int(random(0, width/this.block_size)), int(random(0, height/this.block_size)), this);
-    this.walls = new Wall[100];
+    this.walls = new Wall[10];
     this.input = new InputProcessor('w', 'd', 'a');
-
+    for (int i = 0; i < robot.length; i++){
+      robot[i] = new Robot(i,5, this); 
+    }
     for (int x = 0; x < walls.length; x += 1) { // create object walls
       walls[x] = new Wall(int(random(0, width/this.block_size)), int(random(0, height/this.block_size)), this);
-      if ((walls[x].column == robot.column && walls[x].rown == robot.rown) || (walls[x].column == target.column && walls[x].rown == target.rown)) {
+      if ((walls[x].column == robot[0].column && walls[x].rown == robot[0].rown) || (walls[x].column == target.column && walls[x].rown == target.rown)) {
         walls[x] = new Wall(int(random(0, width/this.block_size)), int(random(0, height/this.block_size)), this);
       }
     }
   }
 
   void draw () {
-    this.robot.draw();
+     background(255);
+    for (int i = 0; i < robot.length; i++){
+      
+      if (robot[i] == null) break ;
+      this.robot[i].draw();
+    }
     this.target.draw();
     line(0, 0, width, 0);  // draw world
     for (int x = this.block_size; x < width; x += this.block_size) {
@@ -55,10 +63,10 @@ class World {
   }
 
   void update() {   
-    if (robot.column == target.column && robot.rown == target.rown) {  // robot hit target
+    if (robot[0].column == target.column && robot[0].rown == target.rown) {  // robot hit target
       target = new Target(int(random(0, width/this.block_size)), int(random(0, height/this.block_size)), this);
       for (int i = 0; i < this.walls.length; i +=1) {
-        if ((walls[i].column == target.column && walls[i].rown == target.rown) || robot.column == target.column && robot.rown == target.rown) {
+        if ((walls[i].column == target.column && walls[i].rown == target.rown) || robot[0].column == target.column && robot[0].rown == target.rown) {
           target = new Target(int(random(0, width/this.block_size)), int(random(0, height/this.block_size)), this);
         }
       }
@@ -71,7 +79,7 @@ class World {
     PrintWriter save;
     save = createWriter(save_file);
     save.println("block_size="+this.block_size);
-    save.println("robot="+this.robot.column+","+this.robot.rown);
+    save.println("robot="+this.robot[0].column+","+this.robot[0].rown);
     save.println("target="+target.column+","+target.rown);
     save.println("input_pro="+input.move_key+","+input.turn_left+","+input.turn_right);    
     for (int i = 0; i < this.walls.length; i++) {
@@ -88,7 +96,7 @@ class World {
     
     String[] line_2 = split(all_lines[1], '=');
     String[] robot_column_rown = split(line_2[1], ',');
-    this.robot = new Robot(int(robot_column_rown[0]), int(robot_column_rown[1]), this);
+    //this.robot = new Robot(int(robot_column_rown[0]), int(robot_column_rown[1]), this);
     
     String[] line_3 = split(all_lines[2], '=');
     String[] target_column_rown = split(line_3[1], ',');
@@ -115,10 +123,15 @@ class Robot {
   Robot(int column, int rown, World world) {
     this.column = column ;
     this.rown = rown ;
-    this.direction = 'w' ;
+    this.direction = 'a' ;
     this.world = world;
   }
-
+  void coppy(){
+    for (int i = world.robot.length-1; i > 0; i--){
+      world.robot[i] = world.robot[i-1];
+    }
+  }
+  
   void draw() {
     float[] point1 = new float[2];
     float[] point2 = new float[2];
@@ -129,7 +142,7 @@ class Robot {
     float[] point7 = new float[2];
     float[] point8 = new float[2];
     
-    background(255);
+    //background(255);
     
     point1[0] = this.column * world.block_size ;
     point1[1] = this.rown * world.block_size ;
@@ -167,7 +180,7 @@ class Robot {
   }
 
   void move() {
-
+    this.coppy();
     if (this.direction == 'w') {
       if (this.rown > 0 && this.isBlocked()) this.rown -= 1 ;
     } 
@@ -289,9 +302,9 @@ class InputProcessor {
   void detect(){
     if (keyPressed) {  // pressed key
       delay(200);
-      if (key == this.turn_left) world.robot.left();
-      else if (key == this.turn_right) world.robot.right();
-      else if (key == this.move_key) world.robot.move();
+      if (key == this.turn_left) world.robot[0].left();
+      else if (key == this.turn_right) world.robot[0].right();
+      else if (key == this.move_key) world.robot[0].move();
     }
     if (mousePressed){
       if(mouseX > width - world.block_size*2 && mouseX < width && mouseY > height - world.block_size && mouseY < height){
