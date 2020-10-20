@@ -90,6 +90,13 @@ class World {
   }
 
   void load( String load_file ) {
+    //////////////////////////////////////////////////////
+//
+// Programmer: Pakpoom Phoonpunt
+//
+// Description: create load method in class world
+// 
+/////////////////////////////////////////////////////
     String[] all_lines = loadStrings(load_file);
     String[] line_1 = split(all_lines[0], '=');
     this.block_size = int(line_1[1]);
@@ -287,7 +294,13 @@ class Target {
     endShape(CLOSE);
   }
 }
-
+//////////////////////////////////////////////////////
+//
+// Programmer: Pakpoom Phoonpunt
+//
+// Description: create class Wall and draw array wall in world
+// 
+/////////////////////////////////////////////////////
 class Wall {
   World world;
   float column, rown;
@@ -297,13 +310,25 @@ class Wall {
     this.rown = rown;
     this.world = world;
   }
-
+//////////////////////////////////////////////////////
+//
+// Programmer: Pakpoom Phoonpunt
+//
+// Description: create draw method
+// 
+/////////////////////////////////////////////////////
   void draw() {
     fill(50, 50);
     rect((world.block_size*this.column), (world.block_size*this.rown), world.block_size, world.block_size);
   }
 }
-
+//////////////////////////////////////////////////////
+//
+// Programmer: Pakpoom Phoonpunt
+//
+// Description: create class InputProcessor
+// 
+/////////////////////////////////////////////////////
 class InputProcessor {
   char move_key, turn_left, turn_right;
 
