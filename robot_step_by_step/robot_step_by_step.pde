@@ -21,12 +21,17 @@ class World {
 
   World(int block_size ) {
     this.robot = new Robot(5, 5, this);
-    //this.robot = new Robot[4];
     this.block_size = block_size;
     this.target = new Target(int(random(0, width/this.block_size)), int(random(0, height/this.block_size)), this);
     this.walls = new Wall[10];
     this.input = new InputProcessor('w', 'd', 'a');
- 
+//////////////////////////////////////////////////////
+//
+// Programmer: Charnchanok Thuppasutthi
+//
+// Description: Add Target Object Fix Stack Objects
+// 
+/////////////////////////////////////////////////////
     for (int x = 0; x < walls.length; x += 1) { // create object walls
       walls[x] = new Wall(int(random(0, width/this.block_size)), int(random(0, height/this.block_size)), this);
       if ((walls[x].column == robot.column && walls[x].rown == robot.rown) || (walls[x].column == target.column && walls[x].rown == target.rown)) {
@@ -74,7 +79,13 @@ class World {
     input.detect();
     this.draw();
   }
-
+//////////////////////////////////////////////////////
+//
+// Programmer: Charnchanok Thuppasutthi
+//
+// Description: Add save world method
+// 
+/////////////////////////////////////////////////////
   void save(String save_file) {
     PrintWriter save;
     save = createWriter(save_file);
@@ -268,7 +279,13 @@ class Robot {
     return check ;
   }
 }
-
+//////////////////////////////////////////////////////
+//
+// Programmer: Charnchanok Thuppasutthi
+//
+// Description: Add Target Object Fix Stack Objects
+// 
+/////////////////////////////////////////////////////
 class Target {
   World world ;
   float column, rown;
